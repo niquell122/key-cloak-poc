@@ -1,23 +1,25 @@
-package authz
+package httpapi.authz
+import rego.v1
 
-import future.keywords
+default allow := true
 
-default allow = false
+# allow if {
+#     input.request_method == "GET"
+# }
 
-allow {
-  input.role == "admin"
-  access_groups = ["write", "read"]
-  input.access in access_groups
-}
+# allow if {
+#     input.request_method == "GET"
+#     print(input.given_name)
+# }
 
-allow {
-  input.role == "user"
-  access_groups = ["read"]
-  input.access in access_groups
-}
+# allow if { 
+#     input.request_method == "GET"
+#     input.user == "Nicolas"
+# }
 
-allow {
-  input.role == "default-roles-master"
-  access_groups = ["write","read"]
-  input.access in access_groups
+deny if {
+  some realm
+  input.request_method == "GET"
+  input.request_path = ["book", realm]
+  input.aud != realm
 }

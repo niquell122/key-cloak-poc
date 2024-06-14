@@ -33,3 +33,4 @@ test_allow_default_roles_master_read {
 test_deny_default_roles_master {
   not allow with input as {"role": "default-roles-master", "access": "some-random-action"}
 }
+

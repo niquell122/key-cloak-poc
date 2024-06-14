@@ -29,6 +29,8 @@ services:
       KC_HEALTH_ENABLED: true
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_USER: nicolas
+      KEYCLOAK_PASSWORD: 123nick
     command: start-dev
     depends_on:
       - postgres
@@ -36,14 +38,18 @@ services:
       - 8080:8080
   
   opa:
+    platform: linux/amd64
     image: openpolicyagent/opa:latest
     ports:
       - 8181:8181
     command:
       - "run"
       - "--server"
+      - "--log-format=json-pretty"
       - "--log-level=debug"
       - "/policies/auth.rego"
+      - "-c"
+      - "/policies/config.yaml"
     volumes:
       - ./policies:/policies
 

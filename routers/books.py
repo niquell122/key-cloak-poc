@@ -8,12 +8,13 @@ from models import Book, BookUpdate
 router = APIRouter()
 
 
-# Private
+# Private - via keycloak
 @router.get(
         "/private", 
         response_description="List all books", 
         response_model=List[Book],
-        dependencies=[Depends(valid_access_token)])
+        dependencies=[Depends(valid_access_token)]  # Keycloak Auth
+    )
 def list_books(request: Request):
     books = list(request.app.database["books"].find(limit=100))
     return books
