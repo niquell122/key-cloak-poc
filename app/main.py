@@ -9,9 +9,12 @@ config = dotenv_values("../.env")
 app = FastAPI()
 
 
+
+
+
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the PyMongo tutorial!"}
+    return {"message": "Welcome to the POC!"}
 
 @app.on_event("startup")
 def startup_db_client():

@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, Body, Request, Response, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from typing import List
-
 from models import User, UserUpdate
+
+from auth import valid_access_token
 
 router = APIRouter()
 
@@ -23,6 +24,18 @@ def create_user(request: Request, user: User = Body(...)):
 
 
 @router.get("/", response_description="List all users", response_model=List[User])
+def list_users(request: Request):
+    users = list(request.app.database["users"].find(limit=100))
+    return users
+
+
+
+@router.get(
+        "/private", 
+        response_description="List all users", 
+        response_model=List[User],
+        dependencies=[Depends(valid_access_token)]
+        )
 def list_users(request: Request):
     users = list(request.app.database["users"].find(limit=100))
     return users
